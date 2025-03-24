@@ -1,0 +1,22 @@
+# Copyright (c) 2022 Mastercard.
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:storedb;TIME ZONE=UTC
+    username: storeuser
+    password: pass
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: INFO
