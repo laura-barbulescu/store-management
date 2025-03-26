@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
                         prod.setDescription(updatedProduct.getDescription());
                     return productRepository.save(prod);
                 })
-                .orElseGet(() -> productRepository.save(productMapper.map(updatedProduct))));
+                .orElseThrow());
        
     }
 

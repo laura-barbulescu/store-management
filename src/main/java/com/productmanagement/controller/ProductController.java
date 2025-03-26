@@ -66,7 +66,7 @@ public class ProductController {
    */
   @RequestMapping(value = "/product", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public Page<ProductDTO> getAllProductsByCodeOrName(@RequestParam(required = false, name = "name") String name,
                                                      @RequestParam(required = false, name = "code") String code,
                                                      @RequestParam(required = false, name = "pageNumber", defaultValue = "0") Integer pageNumber,
@@ -91,7 +91,7 @@ public class ProductController {
    */
   @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('ROLE_USER')")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ProductDTO getProductById(@PathVariable Long id) {
 
     return productService.getProductById(id);
