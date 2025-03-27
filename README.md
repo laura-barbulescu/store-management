@@ -18,8 +18,8 @@ It uses an in-memory H2 database for storing the products. All the data is saved
 
 The service is using basic authentication and role-based authorization. 
 There are 2 users defined:
-* user - which has rights to access to search functionalities 
-* admin - which has rights to search and also alter data 
+* user - which has rights to access only to search functionalities (ROLE_USER)
+* admin - which has rights to search and also alter data (ROLE_ADMIN)
 
 For both of these users the password is "password"
 
@@ -38,7 +38,7 @@ Sample request\
   "price" : 20.5
   }'\
 Response :\
-200 OK
+201 CREATED
 ```json
   {
     "productId":3,
@@ -53,7 +53,7 @@ Sample request:\
   curl --location --request DELETE 'http://localhost:8084/product/1' \
   --header 'Authorization: Basic YWRtaW46cGFzc3dvcmQ=' \
 Response: \
-200 OK
+204 NO CONTENT
 * search product based on unique identifier\
   Sample request:\
 curl --location 'http://localhost:8084/product/4' \
@@ -75,7 +75,6 @@ If both are present then the records matching both filters will be returned \
 Sample request: \
   curl --location 'http://localhost:8084/product?code=pro' \
   --header 'Authorization: Basic YWRtaW46cGFzc3dvcmQ=' \
-  --header 'Cookie: JSESSIONID=F7C859A6908FFAD87EB400AEC00C23D9' \
 Response: \
 200 OK 
 ```json
@@ -117,7 +116,6 @@ Response: \
   curl --location --request PATCH 'http://localhost:8084/product/1' \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Basic YWRtaW46cGFzc3dvcmQ=' \
-  --header 'Cookie: JSESSIONID=F7C859A6908FFAD87EB400AEC00C23D9' \
   --data '{
   "description": "desc7",
   "price" : 68
@@ -133,6 +131,7 @@ Response: \
     "description":"desc7"
   }
 ```
+If the object we need to PATCH would have many fields then I would probably use a JSON Patch implementation. 
 
 
 

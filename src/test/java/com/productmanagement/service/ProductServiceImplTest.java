@@ -5,17 +5,20 @@ import com.productmanagement.mapper.ProductMapper;
 import com.productmanagement.model.SearchParameters;
 import com.productmanagement.persistence.entity.ProductEntity;
 import com.productmanagement.persistence.repository.ProductRepository;
-import com.productmanagement.utils.TestUtils;
+import com.productmanagement.persistence.specification.ProductSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +30,7 @@ import static com.productmanagement.utils.TestUtils.buildProductEntity;
 import static com.productmanagement.utils.TestUtils.buildSearchParameters;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -130,7 +134,7 @@ public class ProductServiceImplTest {
         when(productRepository.save(entity)).thenReturn(entity);
         when(mapper.map(entity)).thenReturn(dto);
 
-        ProductDTO updated = service.updateProduct(id, dto);
+        ProductDTO updated = service.updatePartialProduct(id, dto);
 
         //THEN
         assertEquals(newPrice, updated.getPrice());
@@ -144,11 +148,11 @@ public class ProductServiceImplTest {
 
         //GIVEN
         final Long id = 10L;
-        final ProductEntity entity1 = TestUtils.buildProductEntity(id);
+        final ProductEntity entity1 = buildProductEntity(id);
         final ProductEntity entity2 = buildProductEntity(5L);
-        final ProductDTO dto1 = TestUtils.buildProductDTO(id);
+        final ProductDTO dto1 = buildProductDTO(id);
         final ProductDTO dto2 = buildProductDTO(5L);
-        final SearchParameters searchParameters = TestUtils.buildSearchParameters();
+        final SearchParameters searchParameters = buildSearchParameters();
 
         final Pageable pageRequest = PageRequest.of(searchParameters.getPageNumber(),
                 searchParameters.getPageSize());
@@ -156,9 +160,15 @@ public class ProductServiceImplTest {
 
         List<ProductEntity> entities = List.of(entity1, entity2);
         Page<ProductEntity> res = new PageImpl<>(entities, pageRequest,2 ); 
+        ProductSpecification productSpecification = null;
         
         //WHEN
-        when(productRepository.findAll(any(), (Pageable) any())).thenReturn(res);
+        MockedStatic<ProductSpecification> productSpecificationMockedStatic = Mockito.mockStatic(ProductSpecification.class);
+            productSpecificationMockedStatic.when(() -> ProductSpecification.applyFilters(searchParameters))
+                    .thenReturn(productSpecification);
+           
+                
+        when(productRepository.findAll((Specification<ProductEntity>) eq(productSpecification), eq(pageRequest) )).thenReturn(res);
         when(mapper.map(entities)).thenReturn(dtos);
 
         Page<ProductDTO> results = service.findByCodeOrName(searchParameters);

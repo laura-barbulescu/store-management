@@ -1,5 +1,7 @@
 package com.productmanagement.persistence.specification;
 
+import com.productmanagement.controller.dto.ProductDTO;
+import com.productmanagement.model.SearchParameters;
 import com.productmanagement.persistence.entity.ProductEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,7 +12,7 @@ import java.util.List;
 
 public class ProductSpecification {
         
-    public static Specification<ProductEntity> filterProducts(String name, String code) {
+    private static Specification<ProductEntity> createSearchCriteria(String name, String code) {
         
         return (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -24,5 +26,13 @@ public class ProductSpecification {
             return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
         };
     }
+    
+    public static Specification<ProductEntity> applyFilters(SearchParameters searchParameters) {
+
+        return Specification.where(ProductSpecification.createSearchCriteria(searchParameters.getName(),
+                searchParameters.getCode()));
+    }
+    
+    
     
 }

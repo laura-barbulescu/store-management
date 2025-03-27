@@ -4,8 +4,6 @@ import com.productmanagement.controller.dto.ProductDTO;
 import com.productmanagement.model.SearchParameters;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface ProductService {
 
     ProductDTO getProductById(Long id);
@@ -16,6 +14,6 @@ public interface ProductService {
     
     void deleteProductById(Long id);
 
-    ProductDTO updateProduct(Long id, ProductDTO product);
+    ProductDTO updatePartialProduct(Long id, ProductDTO product);
     
 }

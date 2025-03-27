@@ -28,13 +28,7 @@ public class CustomExceptionHandler {
 
         return handleException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponseBody> handleExceptions(final Exception exception) {
-//        log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), exception);
-//
-//        return handleException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    
 
     @org.springframework.web.bind.annotation.ExceptionHandler({
             NoSuchElementException.class

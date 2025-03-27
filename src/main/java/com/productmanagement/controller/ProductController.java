@@ -48,7 +48,7 @@ public class ProductController {
    * @param id - the unique identifier of the product that we want to delete
    */
   @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void deleteProductById(@PathVariable Long id) {
 
@@ -110,6 +110,6 @@ public class ProductController {
 
     log.info("Partially updating product with ID {} and delta {}", id, product);
     
-    return productService.updateProduct(id, product);
+    return productService.updatePartialProduct(id, product);
   }
 }

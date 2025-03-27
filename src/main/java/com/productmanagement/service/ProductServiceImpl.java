@@ -35,9 +35,8 @@ public class ProductServiceImpl implements ProductService {
                 searchParameters.getPageSize());
 
         
-        Page<ProductEntity> results = productRepository.findAll(Specification.where(ProductSpecification.filterProducts(searchParameters.getName(), 
-                                        searchParameters.getCode())
-                        ), pageRequest
+        Page<ProductEntity> results = productRepository.findAll(ProductSpecification.applyFilters(searchParameters), 
+                pageRequest
                 );
        
         List<ProductDTO> dtos = productMapper.map(results.get().toList());
@@ -67,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(final Long id, final ProductDTO updatedProduct) {
+    public ProductDTO updatePartialProduct(final Long id, final ProductDTO updatedProduct) {
 
         return productMapper.map(productRepository.findById(id)
                 .map(prod -> {
