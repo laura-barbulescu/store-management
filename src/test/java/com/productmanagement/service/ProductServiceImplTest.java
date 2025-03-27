@@ -144,6 +144,27 @@ public class ProductServiceImplTest {
     }
 
     @Test
+    void updatePartialProduct_NotFound(){
+
+        //GIVEN
+        final Long id = 10L;
+        final ProductDTO dto = buildProductDTO(id);
+        
+        //WHEN
+        when(productRepository.findById(id)).thenThrow(new NoSuchElementException());
+
+
+        Throwable exception = assertThrows(NoSuchElementException.class,
+                ()->{service.updatePartialProduct(id, dto);} 
+        );
+        
+        //THEN
+        assertEquals(NoSuchElementException.class, exception.getClass());
+
+
+    }
+
+    @Test
     void findByCodeOrName_Success(){
 
         //GIVEN

@@ -30,7 +30,7 @@ public class CustomExceptionHandler {
     }
     
 
-    @org.springframework.web.bind.annotation.ExceptionHandler({
+    @ExceptionHandler({
             NoSuchElementException.class
     })
     public ResponseEntity<ErrorResponseBody> handleExceptions(final RuntimeException exception) {
@@ -38,13 +38,13 @@ public class CustomExceptionHandler {
         return handleException(exception, HttpStatus.NOT_FOUND);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler({
+    @ExceptionHandler({
             MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponseBody> missingMandatoryParameters(final RuntimeException servletException) {
         return handleException(servletException, HttpStatus.BAD_REQUEST);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler({
+    @ExceptionHandler({
             HttpMediaTypeNotSupportedException.class,
             HttpRequestMethodNotSupportedException.class
     })

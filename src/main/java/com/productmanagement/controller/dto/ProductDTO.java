@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 
 /**
- * Use this POJO for offer service end point responses.
+ * Use this POJO for product responses.
  */
 @Data
 @NoArgsConstructor
